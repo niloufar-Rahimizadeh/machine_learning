@@ -56,3 +56,20 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 print(precision_score(y_train_5, y_train_pred))
 print(recall_score(y_train_5, y_train_pred))
 print(f1_score(y_train_5, y_train_pred))
+##################################################
+
+y_scores = cross_val_predict(sgd_clf, X_train, y_train_5, cv=3,
+                                            method="decision_function")
+
+from sklearn.metrics import precision_recall_curve
+
+precisions, recalls, thresholds = precision_recall_curve(y_train_5, y_scores)
+
+def plot_precision_recall_vs_threshold(precisions, recalls, thresholds):
+    plt.plot(thresholds, precisions[:-1], "b--", label="Precision")
+    plt.plot(thresholds, recalls[:-1], "g-", label="Recall")
+
+plot_precision_recall_vs_threshold(precisions, recalls, thresholds)
+# plt.show()
+threshold_90_precision = thresholds[np.argmax(precisions >= 0.90)]
+print(threshold_90_precision)
